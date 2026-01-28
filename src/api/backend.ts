@@ -1,7 +1,8 @@
 const BASE_URL = "http://localhost:7000";
 
-
-export async function getAbitazioniByCodiceHost(codiceHost) {
+export async function getAbitazioniByCodiceHost(
+    codiceHost: string
+): Promise<any[]> {
     const response = await fetch(
         `${BASE_URL}/abitazioni/host/${codiceHost}`
     );
@@ -13,8 +14,9 @@ export async function getAbitazioniByCodiceHost(codiceHost) {
     return response.json();
 }
 
-
-export async function getUltimaPrenotazioneUtente(utenteId) {
+export async function getUltimaPrenotazioneUtente(
+    utenteId: string
+): Promise<any> {
     const response = await fetch(
         `${BASE_URL}/prenotazioni/ultima/${utenteId}`
     );
@@ -26,7 +28,7 @@ export async function getUltimaPrenotazioneUtente(utenteId) {
     return response.json();
 }
 
-export async function getAbitazionePiuGettonata() {
+export async function getAbitazionePiuGettonata(): Promise<any> {
     const response = await fetch(
         `${BASE_URL}/abitazioni/piu-gettonata`
     );
@@ -38,8 +40,7 @@ export async function getAbitazionePiuGettonata() {
     return response.json();
 }
 
-
-export async function getHostTopUltimoMese() {
+export async function getHostTopUltimoMese(): Promise<any[]> {
     const response = await fetch(
         `${BASE_URL}/host/top-ultimo-mese`
     );
@@ -51,8 +52,7 @@ export async function getHostTopUltimoMese() {
     return response.json();
 }
 
-
-export async function getSuperHost() {
+export async function getSuperHost(): Promise<any[]> {
     const response = await fetch(
         `${BASE_URL}/host/super-host`
     );
@@ -64,7 +64,7 @@ export async function getSuperHost() {
     return response.json();
 }
 
-export async function getTopUtentiUltimoMese() {
+export async function getTopUtentiUltimoMese(): Promise<any[]> {
     const response = await fetch(
         `${BASE_URL}/utenti/top-5-giorni-ultimo-mese`
     );
@@ -76,7 +76,7 @@ export async function getTopUtentiUltimoMese() {
     return response.json();
 }
 
-export async function getMediaPostiLetto() {
+export async function getMediaPostiLetto(): Promise<number> {
     const response = await fetch(
         `${BASE_URL}/abitazioni/media-posti-letto`
     );
