@@ -11,3 +11,13 @@ export interface AbitazioneGettonata {
   indirizzo: string;
   numeroPrenotazioni: number;
 }
+
+export interface Utente {
+  id: string;
+  nome: string;
+  cognome: string;
+  email: string;
+  indirizzo: string;
+}
+
+
