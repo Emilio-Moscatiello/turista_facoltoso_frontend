@@ -5,12 +5,14 @@ import AbitazioniPage from "../pages/AbitazioniPage";
 import PrenotazioniPage from "../pages/PrenotazioniPage";
 import HostPage from "../pages/HostPage";
 import UtentiPage from "../pages/UtentiPage";
+import HomePage from "@/pages/HomePage";
 
 export default function AppRouter() {
     return (
         <BrowserRouter>
             <Routes>
                 <Route element={<MainLayout />}>
+                    <Route path="/" element={<HomePage />} />
                     <Route path="/" element={<Navigate to="/abitazioni" />} />
                     <Route path="/abitazioni" element={<AbitazioniPage />} />
                     <Route path="/prenotazioni" element={<PrenotazioniPage />} />
