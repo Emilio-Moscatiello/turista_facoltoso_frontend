@@ -1,11 +1,7 @@
-import AbitazioniPage from "./pages/AbitazioniPage";
+import AppRouter from "./router/AppRouter";
 
 function App() {
-  return (
-    <div className="min-h-screen bg-base-200">
-      <AbitazioniPage />
-    </div>
-  );
+  return <AppRouter />;
 }
 
 export default App;
