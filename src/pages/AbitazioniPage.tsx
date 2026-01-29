@@ -5,12 +5,17 @@ import {
 } from "../api/backend";
 import AbitazioniTable from "../myComponents/tables/AbitazioniTable";
 import type { Abitazione, AbitazioneGettonata } from "../models/dto";
+import { getMediaPostiLetto } from "../api/backend";
+
 
 export default function AbitazioniPage() {
     const [codiceHost, setCodiceHost] = useState<string>("");
     const [abitazioni, setAbitazioni] = useState<Abitazione[]>([]);
     const [abitazioneGettonata, setAbitazioneGettonata] =
         useState<AbitazioneGettonata | null>(null);
+
+    const [mediaPostiLetto, setMediaPostiLetto] = useState<number | null>(null);
+
 
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
@@ -27,6 +32,20 @@ export default function AbitazioniPage() {
 
         loadAbitazioneGettonata();
     }, []);
+
+    useEffect(() => {
+        const loadStats = async () => {
+            try {
+                const media = await getMediaPostiLetto();
+                setMediaPostiLetto(media);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+
+        loadStats();
+    }, []);
+
 
     const handleSearch = async () => {
         if (!codiceHost) {
@@ -97,6 +116,19 @@ export default function AbitazioniPage() {
                     </div>
                 </div>
             )}
+
+            {mediaPostiLetto !== null && (
+                <div className="card bg-base-100 shadow mt-6">
+                    <div className="card-body">
+                        <h2 className="card-title">Media posti letto</h2>
+                        <p className="text-lg">
+                            <strong>{mediaPostiLetto.toFixed(2)}</strong> posti letto medi
+                            per abitazione
+                        </p>
+                    </div>
+                </div>
+            )}
+
         </div>
     );
 }

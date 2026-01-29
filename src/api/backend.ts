@@ -76,9 +76,9 @@ export async function getTopUtentiUltimoMese(): Promise<any[]> {
     return response.json();
 }
 
-export async function getMediaPostiLetto(): Promise<number> {
+export async function getMediaPostiLetto() {
     const response = await fetch(
-        `${BASE_URL}/abitazioni/media-posti-letto`
+        "http://localhost:7000/abitazioni/media-posti-letto"
     );
 
     if (!response.ok) {
@@ -87,3 +87,4 @@ export async function getMediaPostiLetto(): Promise<number> {
 
     return response.json();
 }
+
