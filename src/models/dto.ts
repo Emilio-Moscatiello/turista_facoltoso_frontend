@@ -5,3 +5,9 @@ export interface Abitazione {
   postiLetto: number;
   prezzo: number;
 }
+
+export interface AbitazioneGettonata {
+  nome: string;
+  indirizzo: string;
+  numeroPrenotazioni: number;
+}

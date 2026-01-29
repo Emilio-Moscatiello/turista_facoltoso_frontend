@@ -1,13 +1,32 @@
-import { useState } from "react";
-import { getAbitazioniByCodiceHost } from "../api/backend";
+import { useEffect, useState } from "react";
+import {
+    getAbitazioniByCodiceHost,
+    getAbitazionePiuGettonata,
+} from "../api/backend";
 import AbitazioniTable from "../myComponents/tables/AbitazioniTable";
-import type { Abitazione } from "../models/dto";
+import type { Abitazione, AbitazioneGettonata } from "../models/dto";
 
 export default function AbitazioniPage() {
     const [codiceHost, setCodiceHost] = useState<string>("");
     const [abitazioni, setAbitazioni] = useState<Abitazione[]>([]);
+    const [abitazioneGettonata, setAbitazioneGettonata] =
+        useState<AbitazioneGettonata | null>(null);
+
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const loadAbitazioneGettonata = async () => {
+            try {
+                const data = await getAbitazionePiuGettonata();
+                setAbitazioneGettonata(data);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+
+        loadAbitazioneGettonata();
+    }, []);
 
     const handleSearch = async () => {
         if (!codiceHost) {
@@ -58,6 +77,26 @@ export default function AbitazioniPage() {
 
             <AbitazioniTable abitazioni={abitazioni} />
 
+            {abitazioneGettonata && (
+                <div className="card bg-base-100 shadow mt-6">
+                    <div className="card-body">
+                        <h2 className="card-title">
+                            Abitazione più gettonata (ultimo mese)
+                        </h2>
+                        <p>
+                            <strong>Nome:</strong> {abitazioneGettonata.nome}
+                        </p>
+                        <p>
+                            <strong>Indirizzo:</strong>{" "}
+                            {abitazioneGettonata.indirizzo}
+                        </p>
+                        <p>
+                            <strong>Prenotazioni:</strong>{" "}
+                            {abitazioneGettonata.numeroPrenotazioni}
+                        </p>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
