@@ -20,4 +20,11 @@ export interface Utente {
   indirizzo: string;
 }
 
+export interface Host {
+  id?: string;
+  utenteId: string;
+  codiceHost: string;
+}
+
+
 

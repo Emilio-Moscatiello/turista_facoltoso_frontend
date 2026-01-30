@@ -167,5 +167,45 @@ export async function getAbitazioni() {
 }
 
 
+// === HOST CRUD ===
+
+export async function getAllHost() {
+    const res = await fetch("http://localhost:7000/host");
+    if (!res.ok) throw new Error("Errore caricamento host");
+    return res.json();
+}
+
+export async function createHost(host: any) {
+    const res = await fetch("http://localhost:7000/host", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(host),
+    });
+
+    if (!res.ok) throw new Error("Errore creazione host");
+    return res.json();
+}
+
+export async function updateHost(id: string, host: any) {
+    const res = await fetch(`http://localhost:7000/host/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(host),
+    });
+
+    if (!res.ok) throw new Error("Errore aggiornamento host");
+    return res.json();
+}
+
+export async function deleteHost(id: string) {
+    const res = await fetch(`http://localhost:7000/host/${id}`, {
+        method: "DELETE",
+    });
+
+    if (!res.ok) throw new Error("Errore eliminazione host");
+}
+
+
+
 
 

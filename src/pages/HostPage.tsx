@@ -1,14 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
-    getSuperHost,
+    getAllHost,
+    createHost,
+    updateHost,
+    deleteHost,
     getHostTopUltimoMese,
+    getSuperHost,
 } from "../api/backend";
+import type { Host } from "../models/dto";
+import HostForm from "../myComponents/forms/HostForm";
+import HostTable from "../myComponents/tables/HostTable";
 
 export default function HostPage() {
     const [superHost, setSuperHost] = useState<any[]>([]);
     const [topHost, setTopHost] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
+
+    const [host, setHost] = useState<Host[]>([]);
+    const [hostSelezionato, setHostSelezionato] = useState<Host | null>(null);
+
+    useEffect(() => {
+        getAllHost().then(setHost);
+    }, []);
+
 
     const handleLoadSuperHost = async () => {
         setLoading(true);
@@ -46,6 +61,8 @@ export default function HostPage() {
         } finally {
             setLoading(false);
         }
+
+
     };
 
     return (
@@ -122,6 +139,36 @@ export default function HostPage() {
                     </table>
                 </div>
             )}
+
+            <hr className="my-10" />
+
+            <h2 className="text-2xl font-bold mb-4">Gestione Host</h2>
+
+            <HostForm
+                hostSelezionato={hostSelezionato}
+                onSave={async (host) => {
+                    if (host.id) {
+                        await updateHost(host.id, host);
+                    } else {
+                        await createHost(host);
+                    }
+                    setHostSelezionato(null);
+                    setHost(await getAllHost());
+                }}
+                onCancel={() => setHostSelezionato(null)}
+            />
+
+            <HostTable
+                host={host}
+                onEdit={setHostSelezionato}
+                onDelete={async (id) => {
+                    await deleteHost(id);
+                    setHost(await getAllHost());
+                }}
+            />
+
         </div>
+
+
     );
 }

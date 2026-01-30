@@ -19,6 +19,7 @@ export default function UtentiTable({
         <table className="table table-zebra mt-6">
             <thead>
                 <tr>
+                    <th>ID</th>
                     <th>Nome</th>
                     <th>Cognome</th>
                     <th>Email</th>
@@ -29,10 +30,19 @@ export default function UtentiTable({
             <tbody>
                 {utenti.map((u) => (
                     <tr key={u.id}>
+                        <td
+                            className="font-mono text-xs cursor-pointer"
+                            title="Clicca per copiare"
+                            onClick={() => navigator.clipboard.writeText(u.id)}
+                        >
+                            {u.id.slice(0, 8)}…
+                        </td>
+
                         <td>{u.nome}</td>
                         <td>{u.cognome}</td>
                         <td>{u.email}</td>
                         <td>{u.indirizzo}</td>
+
                         <td className="flex gap-2">
                             <button
                                 className="btn btn-sm btn-warning"
