@@ -10,6 +10,7 @@ import {
 import UtentiTable from "../myComponents/tables/UtentiTable";
 import UtenteForm from "../myComponents/forms/UtenteForm";
 import type { Utente } from "../models/dto";
+import PrenotazioneForm from "@/myComponents/forms/PrenotazioneForm";
 
 export default function UtentiPage() {
 
@@ -18,6 +19,9 @@ export default function UtentiPage() {
 
     const [utenti, setUtenti] = useState<Utente[]>([]);
     const [utenteSelezionato, setUtenteSelezionato] = useState<Utente | null>(null);
+
+    const [prenotazioneUtenteId, setPrenotazioneUtenteId] = useState<string | null>(null);
+
 
     useEffect(() => {
         getAllUtenti().then(setUtenti);
@@ -98,7 +102,21 @@ export default function UtentiPage() {
                 utenti={utenti}
                 onEdit={setUtenteSelezionato}
                 onDelete={handleDelete}
+                onAddPrenotazione={(utenteId) => setPrenotazioneUtenteId(utenteId)}
             />
+
+            {prenotazioneUtenteId && (
+                <PrenotazioneForm
+                    utenteId={prenotazioneUtenteId}
+                    onSuccess={() => {
+                        setPrenotazioneUtenteId(null);
+                        alert("Prenotazione creata con successo");
+                    }}
+                    onCancel={() => setPrenotazioneUtenteId(null)}
+                />
+            )}
+
+
         </div>
     );
 }

@@ -130,4 +130,42 @@ export async function deleteUtente(id: string) {
     if (!res.ok) throw new Error("Errore eliminazione utente");
 }
 
+export async function createPrenotazioneForUtente(
+    utenteId: string,
+    prenotazione: {
+        abitazioneId: string;
+        dataInizio: string;
+        dataFine: string;
+    }
+) {
+    const response = await fetch(
+        `${BASE_URL}/utenti/${utenteId}/prenotazioni`,
+        {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(prenotazione),
+        }
+    );
+
+    if (!response.ok) {
+        const msg = await response.text();
+        throw new Error(msg);
+    }
+
+    return response.json();
+
+}
+
+export async function getAbitazioni() {
+    const response = await fetch(`${BASE_URL}/abitazioni`);
+
+    if (!response.ok) {
+        throw new Error("Errore nel recupero delle abitazioni");
+    }
+
+    return response.json();
+}
+
+
+
 

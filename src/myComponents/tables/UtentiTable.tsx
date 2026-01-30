@@ -2,11 +2,17 @@ import type { Utente } from "../../models/dto";
 
 interface Props {
     utenti: Utente[];
-    onEdit: (utente: Utente) => void;
+    onEdit: (u: Utente) => void;
     onDelete: (id: string) => void;
+    onAddPrenotazione: (utenteId: string) => void;
 }
 
-export default function UtentiTable({ utenti, onEdit, onDelete }: Props) {
+export default function UtentiTable({
+    utenti,
+    onEdit,
+    onDelete,
+    onAddPrenotazione,
+}: Props) {
     if (utenti.length === 0) return null;
 
     return (
@@ -34,11 +40,19 @@ export default function UtentiTable({ utenti, onEdit, onDelete }: Props) {
                             >
                                 Modifica
                             </button>
+
                             <button
                                 className="btn btn-sm btn-error"
                                 onClick={() => onDelete(u.id)}
                             >
                                 Elimina
+                            </button>
+
+                            <button
+                                className="btn btn-sm btn-secondary"
+                                onClick={() => onAddPrenotazione(u.id)}
+                            >
+                                Aggiungi prenotazione
                             </button>
                         </td>
                     </tr>
