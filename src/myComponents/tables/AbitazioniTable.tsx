@@ -2,13 +2,15 @@ import type { Abitazione } from "../../models/dto";
 
 interface AbitazioniTableProps {
     abitazioni: Abitazione[];
+    onDelete: (abitazioneId: string) => void;
 }
 
 export default function AbitazioniTable({
     abitazioni,
+    onDelete,
 }: AbitazioniTableProps) {
     if (abitazioni.length === 0) {
-        return null;
+        return <p className="text-gray-500 mt-4">Nessuna abitazione presente</p>;
     }
 
     return (
@@ -20,6 +22,7 @@ export default function AbitazioniTable({
                         <th>Indirizzo</th>
                         <th>Posti letto</th>
                         <th>Prezzo</th>
+                        <th>Azioni</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -29,6 +32,14 @@ export default function AbitazioniTable({
                             <td>{a.indirizzo}</td>
                             <td>{a.postiLetto}</td>
                             <td>{a.prezzo} €</td>
+                            <td>
+                                <button
+                                    className="btn btn-sm btn-error"
+                                    onClick={() => onDelete(a.id)}
+                                >
+                                    Elimina
+                                </button>
+                            </td>
                         </tr>
                     ))}
                 </tbody>

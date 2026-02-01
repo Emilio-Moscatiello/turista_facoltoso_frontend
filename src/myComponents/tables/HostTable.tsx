@@ -1,4 +1,5 @@
 import type { Host } from "../../models/dto";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
     host: Host[];
@@ -7,6 +8,7 @@ interface Props {
 }
 
 export default function HostTable({ host, onEdit, onDelete }: Props) {
+    const navigate = useNavigate();
     if (host.length === 0) return null;
 
     return (
@@ -24,6 +26,13 @@ export default function HostTable({ host, onEdit, onDelete }: Props) {
                         <td>{h.utenteId}</td>
                         <td>{h.codiceHost}</td>
                         <td className="flex gap-2">
+                            <button
+                                className="btn btn-sm btn-accent"
+                                onClick={() => navigate(`/host/${h.id}/abitazioni`)}
+                            >
+                                Gestisci abitazioni
+                            </button>
+
                             <button
                                 className="btn btn-sm btn-warning"
                                 onClick={() => onEdit(h)}

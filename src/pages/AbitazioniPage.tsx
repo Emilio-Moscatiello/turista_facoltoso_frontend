@@ -2,50 +2,30 @@ import { useEffect, useState } from "react";
 import {
     getAbitazioniByCodiceHost,
     getAbitazionePiuGettonata,
+    getMediaPostiLetto,
 } from "../api/backend";
 import AbitazioniTable from "../myComponents/tables/AbitazioniTable";
 import type { Abitazione, AbitazioneGettonata } from "../models/dto";
-import { getMediaPostiLetto } from "../api/backend";
-
 
 export default function AbitazioniPage() {
-    const [codiceHost, setCodiceHost] = useState<string>("");
+    const [codiceHost, setCodiceHost] = useState("");
     const [abitazioni, setAbitazioni] = useState<Abitazione[]>([]);
     const [abitazioneGettonata, setAbitazioneGettonata] =
         useState<AbitazioneGettonata | null>(null);
-
     const [mediaPostiLetto, setMediaPostiLetto] = useState<number | null>(null);
 
-
-    const [loading, setLoading] = useState<boolean>(false);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        const loadAbitazioneGettonata = async () => {
-            try {
-                const data = await getAbitazionePiuGettonata();
-                setAbitazioneGettonata(data);
-            } catch (err) {
-                console.error(err);
-            }
-        };
+        getAbitazionePiuGettonata()
+            .then(setAbitazioneGettonata)
+            .catch(console.error);
 
-        loadAbitazioneGettonata();
+        getMediaPostiLetto()
+            .then(setMediaPostiLetto)
+            .catch(console.error);
     }, []);
-
-    useEffect(() => {
-        const loadStats = async () => {
-            try {
-                const media = await getMediaPostiLetto();
-                setMediaPostiLetto(media);
-            } catch (err) {
-                console.error(err);
-            }
-        };
-
-        loadStats();
-    }, []);
-
 
     const handleSearch = async () => {
         if (!codiceHost) {
@@ -61,11 +41,7 @@ export default function AbitazioniPage() {
             const data = await getAbitazioniByCodiceHost(codiceHost);
             setAbitazioni(data);
         } catch (err) {
-            if (err instanceof Error) {
-                setError(err.message);
-            } else {
-                setError("Errore sconosciuto");
-            }
+            setError(err instanceof Error ? err.message : "Errore sconosciuto");
         } finally {
             setLoading(false);
         }
@@ -94,7 +70,10 @@ export default function AbitazioniPage() {
             {loading && <p className="text-info">Caricamento...</p>}
             {error && <p className="text-error">{error}</p>}
 
-            <AbitazioniTable abitazioni={abitazioni} />
+            <AbitazioniTable
+                abitazioni={abitazioni}
+                onDelete={() => { }}
+            />
 
             {abitazioneGettonata && (
                 <div className="card bg-base-100 shadow mt-6">
@@ -102,13 +81,8 @@ export default function AbitazioniPage() {
                         <h2 className="card-title">
                             Abitazione più gettonata (ultimo mese)
                         </h2>
-                        <p>
-                            <strong>Nome:</strong> {abitazioneGettonata.nome}
-                        </p>
-                        <p>
-                            <strong>Indirizzo:</strong>{" "}
-                            {abitazioneGettonata.indirizzo}
-                        </p>
+                        <p><strong>Nome:</strong> {abitazioneGettonata.nome}</p>
+                        <p><strong>Indirizzo:</strong> {abitazioneGettonata.indirizzo}</p>
                         <p>
                             <strong>Prenotazioni:</strong>{" "}
                             {abitazioneGettonata.numeroPrenotazioni}
@@ -128,7 +102,6 @@ export default function AbitazioniPage() {
                     </div>
                 </div>
             )}
-
         </div>
     );
 }

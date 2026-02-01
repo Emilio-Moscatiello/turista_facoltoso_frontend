@@ -205,6 +205,22 @@ export async function deleteHost(id: string) {
     if (!res.ok) throw new Error("Errore eliminazione host");
 }
 
+export const getAbitazioniByHostId = (hostId: string) =>
+    fetch(`${BASE_URL}/host/${hostId}/abitazioni`).then(r => r.json());
+
+export const createAbitazioneForHost = (hostId: string, data: any) =>
+    fetch(`${BASE_URL}/abitazioni/host/${hostId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+    });
+
+export const deleteAbitazioneForHost = (hostId: string, abitazioneId: string) =>
+    fetch(`${BASE_URL}/abitazioni/host/${hostId}/${abitazioneId}`, {
+        method: "DELETE",
+    });
+
+
 
 
 
