@@ -1,80 +1,189 @@
-import { useState } from "react";
-import { getUltimaPrenotazioneUtente } from "../api/backend";
+import { useEffect, useState } from "react";
+import {
+    getUltimaPrenotazioneUtente,
+    getAllHost,
+    getPrenotazioniByHostId,
+} from "../api/backend";
+import FeedbackForm from "@/myComponents/forms/FeedbackForm";
 
 export default function PrenotazioniPage() {
-    const [utenteId, setUtenteId] = useState<string>("");
-    const [prenotazione, setPrenotazione] = useState<any | null>(null);
-    const [loading, setLoading] = useState<boolean>(false);
-    const [error, setError] = useState<string | null>(null);
+    // ===== TASK 1: ULTIMA PRENOTAZIONE UTENTE (NON TOCCATO) =====
+    const [utenteId, setUtenteId] = useState("");
+    const [ultimaPrenotazione, setUltimaPrenotazione] = useState<any | null>(null);
+    const [loadingUltima, setLoadingUltima] = useState(false);
+    const [errorUltima, setErrorUltima] = useState<string | null>(null);
 
-    const handleSearch = async () => {
+    const handleSearchUltima = async () => {
         if (!utenteId) {
-            setError("Inserisci un ID utente valido");
+            setErrorUltima("Inserisci un ID utente valido");
             return;
         }
 
-        setLoading(true);
-        setError(null);
-        setPrenotazione(null);
+        setLoadingUltima(true);
+        setErrorUltima(null);
+        setUltimaPrenotazione(null);
 
         try {
             const data = await getUltimaPrenotazioneUtente(utenteId);
-            setPrenotazione(data);
-        } catch (err) {
-            if (err instanceof Error) {
-                setError(err.message);
-            } else {
-                setError("Errore sconosciuto");
-            }
+            setUltimaPrenotazione(data);
+        } catch (e) {
+            setErrorUltima("Nessuna prenotazione trovata");
         } finally {
-            setLoading(false);
+            setLoadingUltima(false);
+        }
+    };
+
+    // ===== TASK 2: PRENOTAZIONI PER HOST (OPZIONE B) =====
+    const [hosts, setHosts] = useState<any[]>([]);
+    const [openHostId, setOpenHostId] = useState<string | null>(null);
+    const [prenotazioniHost, setPrenotazioniHost] = useState<any[]>([]);
+    const [loadingHost, setLoadingHost] = useState(false);
+
+    // ===== FEEDBACK =====
+    const [feedbackPrenotazioneId, setFeedbackPrenotazioneId] =
+        useState<string | null>(null);
+
+    useEffect(() => {
+        getAllHost().then(setHosts);
+    }, []);
+
+    const toggleHost = async (hostId: string) => {
+        if (openHostId === hostId) {
+            setOpenHostId(null);
+            setPrenotazioniHost([]);
+            return;
+        }
+
+        setOpenHostId(hostId);
+        setLoadingHost(true);
+
+        try {
+            const data = await getPrenotazioniByHostId(hostId);
+            setPrenotazioniHost(data);
+        } catch {
+            setPrenotazioniHost([]);
+        } finally {
+            setLoadingHost(false);
         }
     };
 
     return (
-        <div>
-            <h1 className="text-2xl font-bold mb-4">
-                Ultima prenotazione per utente
-            </h1>
+        <div className="space-y-10">
+            {/* ================= SEZIONE A ================= */}
+            <section>
+                <h1 className="text-2xl font-bold mb-4">
+                    Ultima prenotazione per utente
+                </h1>
 
-            <div className="flex gap-4 mb-4">
-                <input
-                    type="text"
-                    placeholder="Inserisci ID utente (UUID)"
-                    className="input input-bordered w-full max-w-md"
-                    value={utenteId}
-                    onChange={(e) => setUtenteId(e.target.value)}
-                />
+                <div className="flex gap-4 mb-4">
+                    <input
+                        type="text"
+                        placeholder="Inserisci ID utente (UUID)"
+                        className="input input-bordered w-full max-w-md"
+                        value={utenteId}
+                        onChange={(e) => setUtenteId(e.target.value)}
+                    />
 
-                <button className="btn btn-primary" onClick={handleSearch}>
-                    Cerca
-                </button>
-            </div>
-
-            {loading && <p className="text-info">Caricamento...</p>}
-            {error && <p className="text-error">{error}</p>}
-
-            {prenotazione && (
-                <div className="card bg-base-100 shadow mt-4">
-                    <div className="card-body">
-                        <h2 className="card-title">Dettagli prenotazione</h2>
-
-                        <p>
-                            <strong>Data inizio:</strong> {prenotazione.dataInizio}
-                        </p>
-                        <p>
-                            <strong>Data fine:</strong> {prenotazione.dataFine}
-                        </p>
-                        <p>
-                            <strong>Abitazione:</strong>{" "}
-                            {prenotazione.abitazioneNome}
-                        </p>
-                        <p>
-                            <strong>Utente:</strong>{" "}
-                            {prenotazione.utenteNome} {prenotazione.utenteCognome}
-                        </p>
-                    </div>
+                    <button className="btn btn-primary" onClick={handleSearchUltima}>
+                        Cerca
+                    </button>
                 </div>
+
+                {loadingUltima && <p className="text-info">Caricamento...</p>}
+                {errorUltima && <p className="text-error">{errorUltima}</p>}
+
+                {ultimaPrenotazione && (
+                    <div className="card bg-base-100 shadow">
+                        <div className="card-body">
+                            <p><strong>Dal:</strong> {ultimaPrenotazione.dataInizio}</p>
+                            <p><strong>Al:</strong> {ultimaPrenotazione.dataFine}</p>
+                            <p><strong>Abitazione:</strong> {ultimaPrenotazione.abitazioneNome}</p>
+                            <p>
+                                <strong>Utente:</strong>{" "}
+                                {ultimaPrenotazione.utenteNome}{" "}
+                                {ultimaPrenotazione.utenteCognome}
+                            </p>
+                        </div>
+                    </div>
+                )}
+            </section>
+
+            {/* ================= SEZIONE B ================= */}
+            <section>
+                <h2 className="text-2xl font-bold mb-4">
+                    Prenotazioni per Host
+                </h2>
+
+                {hosts.map((h) => (
+                    <div key={h.id} className="card bg-base-100 shadow mb-3">
+                        <div
+                            className="card-body cursor-pointer"
+                            onClick={() => toggleHost(h.id)}
+                        >
+                            <h3 className="font-bold">
+                                {h.codiceHost} – {h.utenteId.slice(0, 8)}…
+                            </h3>
+
+                            {openHostId === h.id && (
+                                <>
+                                    {loadingHost && <p>Caricamento...</p>}
+
+                                    {!loadingHost && prenotazioniHost.length === 0 && (
+                                        <p className="text-sm">Nessuna prenotazione</p>
+                                    )}
+
+                                    {prenotazioniHost.length > 0 && (
+                                        <table className="table table-zebra mt-3">
+                                            <thead>
+                                                <tr>
+                                                    <th>Utente</th>
+                                                    <th>Abitazione</th>
+                                                    <th>Dal</th>
+                                                    <th>Al</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {prenotazioniHost.map((p) => (
+                                                    <tr key={p.id}>
+                                                        <td className="font-mono text-xs">
+                                                            {p.utenteId.slice(0, 8)}…
+                                                        </td>
+                                                        <td>{p.abitazioneNome}</td>
+                                                        <td>{p.dataInizio}</td>
+                                                        <td>{p.dataFine}</td>
+                                                        <td>
+                                                            <button
+                                                                className="btn btn-sm btn-secondary"
+                                                                onClick={() =>
+                                                                    setFeedbackPrenotazioneId(p.id)
+                                                                }
+                                                            >
+                                                                Lascia feedback
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    )}
+                                </>
+                            )}
+                        </div>
+                    </div>
+                ))}
+            </section>
+
+            {/* ================= FEEDBACK ================= */}
+            {feedbackPrenotazioneId && (
+                <FeedbackForm
+                    prenotazioneId={feedbackPrenotazioneId}
+                    onSuccess={() => {
+                        alert("Feedback inviato");
+                        setFeedbackPrenotazioneId(null);
+                    }}
+                    onCancel={() => setFeedbackPrenotazioneId(null)}
+                />
             )}
         </div>
     );
