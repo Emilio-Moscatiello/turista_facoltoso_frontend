@@ -74,7 +74,7 @@ export default function PrenotazioniPage() {
 
             {/* ultima prenotazione per utente */}
             <section>
-                <h1 className="text-2xl font-bold mb-4">
+                <h1 className="text-2xl font-semibold mb-4">
                     Ultima prenotazione per utente
                 </h1>
 
@@ -116,7 +116,7 @@ export default function PrenotazioniPage() {
 
             {/* prenotazioni per host */}
             <section>
-                <h2 className="text-2xl font-bold mb-4">
+                <h2 className="text-2xl font-semibold mb-4">
                     Prenotazioni per Host
                 </h2>
 
@@ -126,7 +126,7 @@ export default function PrenotazioniPage() {
                             className="card-body cursor-pointer"
                             onClick={() => toggleHost(h.id)}
                         >
-                            <h3 className="font-bold">
+                            <h3 className="font-semibold">
                                 {h.codiceHost} – {h.utenteId.slice(0, 8)}…
                             </h3>
                         </div>
@@ -162,7 +162,7 @@ export default function PrenotazioniPage() {
                                                     <td>{p.dataFine}</td>
                                                     <td>
                                                         <button
-                                                            className="btn btn-sm btn-secondary"
+                                                            className="btn btn-sm btn-success"
                                                             onClick={(e) => {
                                                                 e.stopPropagation();
                                                                 setFeedbackPrenotazioneId(p.prenotazioneId);
@@ -182,9 +182,7 @@ export default function PrenotazioniPage() {
                 ))}
             </section>
 
-            {/* ===============================
-               FEEDBACK
-               =============================== */}
+            {/* feedback */}
 
             {feedbackPrenotazioneId && (
                 <FeedbackForm

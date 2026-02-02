@@ -31,7 +31,7 @@ export default function UtenteForm({ utenteSelezionato, onSave, onCancel }: Prop
 
     return (
         <div className="card bg-base-100 shadow p-4 mt-6">
-            <h2 className="text-xl font-bold mb-4">
+            <h2 className="text-xl font-semibold mb-4">
                 {utente.id ? "Modifica Utente" : "Nuovo Utente"}
             </h2>
 
@@ -50,7 +50,7 @@ export default function UtenteForm({ utenteSelezionato, onSave, onCancel }: Prop
                 <button className="btn btn-primary" onClick={handleSubmit}>
                     Salva
                 </button>
-                <button className="btn btn-ghost" onClick={onCancel}>
+                <button className="btn btn-error" onClick={onCancel}>
                     Annulla
                 </button>
             </div>

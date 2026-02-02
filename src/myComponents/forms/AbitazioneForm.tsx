@@ -45,7 +45,7 @@ export default function AbitazioneForm({ onSave }: Props) {
 
     return (
         <div className="card bg-base-100 shadow p-4 mb-6">
-            <h3 className="font-bold mb-4">Nuova abitazione</h3>
+            <h3 className="font-semibold mb-4">Nuova abitazione</h3>
 
             <input
                 className="input input-bordered w-full mb-3"

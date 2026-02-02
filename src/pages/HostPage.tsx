@@ -67,14 +67,14 @@ export default function HostPage() {
 
     return (
         <div>
-            <h1 className="text-2xl font-bold mb-6">Gestione Host</h1>
+            <h1 className="text-2xl font-semibold mb-6">Gestione Host</h1>
 
             <div className="flex gap-4 mb-6">
-                <button className="btn btn-primary" onClick={handleLoadSuperHost}>
+                <button className="btn btn-success" onClick={handleLoadSuperHost}>
                     Carica Super Host
                 </button>
 
-                <button className="btn btn-secondary" onClick={handleLoadTopHost}>
+                <button className="btn btn-success" onClick={handleLoadTopHost}>
                     Carica Host Top Ultimo Mese
                 </button>
             </div>
@@ -142,7 +142,7 @@ export default function HostPage() {
 
             <hr className="my-10" />
 
-            <h2 className="text-2xl font-bold mb-4">Gestione Host</h2>
+            <h2 className="text-2xl font-semibold mb-4">Aggiungi Host</h2>
 
             <HostForm
                 hostSelezionato={hostSelezionato}

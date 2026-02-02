@@ -59,7 +59,7 @@ export default function UtentiTable({
                             </button>
 
                             <button
-                                className="btn btn-sm btn-secondary"
+                                className="btn btn-sm btn-success"
                                 onClick={() => onAddPrenotazione(u.id)}
                             >
                                 Aggiungi prenotazione

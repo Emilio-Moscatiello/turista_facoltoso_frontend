@@ -30,7 +30,7 @@ export default function HostForm({
 
     return (
         <div className="card bg-base-100 shadow p-4 mb-6">
-            <h2 className="text-lg font-bold mb-4">
+            <h2 className="text-lg font-semibold mb-4">
                 {hostSelezionato ? "Modifica Host" : "Nuovo Host"}
             </h2>
 
@@ -56,7 +56,7 @@ export default function HostForm({
                 <button className="btn btn-primary" onClick={handleSubmit}>
                     Salva
                 </button>
-                <button className="btn btn-outline" onClick={onCancel}>
+                <button className="btn btn-error" onClick={onCancel}>
                     Annulla
                 </button>
             </div>

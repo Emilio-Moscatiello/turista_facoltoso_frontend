@@ -6,9 +6,12 @@ export default function MainLayout() {
             {/* NAVBAR */}
             <div className="navbar bg-base-100 shadow">
                 <div className="flex-1">
-                    <span className="text-xl font-bold">
-                        Turista Facoltoso – Backoffice
-                    </span>
+                    <Link
+                        to="/"
+                        className="text-xl font-semibold btn btn-ghost normal-case"
+                    >
+                        Turista per sempre
+                    </Link>
                 </div>
                 <div className="flex gap-4">
                     <Link className="btn btn-ghost" to="/abitazioni">

@@ -49,7 +49,7 @@ export default function AbitazioniPage() {
 
     return (
         <div>
-            <h1 className="text-2xl font-bold mb-4">
+            <h1 className="text-2xl font-semibold mb-4">
                 Ricerca abitazioni per codice host
             </h1>
 

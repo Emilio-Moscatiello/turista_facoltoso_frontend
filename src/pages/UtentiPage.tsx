@@ -57,7 +57,7 @@ export default function UtentiPage() {
 
     return (
         <div>
-            <h1 className="text-2xl font-bold mb-4">Utenti</h1>
+            <h1 className="text-2xl font-semibold mb-4">Utenti</h1>
 
             <button
                 className="btn btn-primary mb-4"

@@ -41,7 +41,7 @@ export default function PrenotazioneForm({
 
     return (
         <div className="card bg-base-100 shadow p-4">
-            <h3 className="text-lg font-bold mb-2">Nuova prenotazione</h3>
+            <h3 className="text-lg font-semibold mb-2">Nuova prenotazione</h3>
 
             {error && <p className="text-error">{error}</p>}
 
@@ -76,7 +76,7 @@ export default function PrenotazioneForm({
                 <button className="btn btn-primary" onClick={handleSubmit}>
                     Salva
                 </button>
-                <button className="btn btn-outline" onClick={onCancel}>
+                <button className="btn btn-error" onClick={onCancel}>
                     Annulla
                 </button>
             </div>

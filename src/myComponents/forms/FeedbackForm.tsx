@@ -32,7 +32,7 @@ export default function FeedbackForm({
 
     return (
         <div className="card bg-base-100 shadow p-4 mt-4">
-            <h3 className="font-bold mb-2">Lascia un feedback</h3>
+            <h3 className="font-semibold mb-2">Lascia un feedback</h3>
 
             {error && <p className="text-error">{error}</p>}
 
@@ -66,7 +66,7 @@ export default function FeedbackForm({
                 <button className="btn btn-primary" onClick={handleSubmit}>
                     Invia
                 </button>
-                <button className="btn btn-ghost" onClick={onCancel}>
+                <button className="btn btn-error" onClick={onCancel}>
                     Annulla
                 </button>
             </div>

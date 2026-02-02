@@ -50,7 +50,7 @@ export default function AbitazioniHostPage() {
 
     return (
         <div>
-            <h1 className="text-2xl font-bold mb-4">
+            <h1 className="text-2xl font-semibold mb-4">
                 Gestione abitazioni
             </h1>
 
