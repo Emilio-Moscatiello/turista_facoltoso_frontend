@@ -1,73 +1,88 @@
-# React + TypeScript + Vite
+# 🧳 Turista Facoltoso – Backoffice Management System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Turista per sempre** è una piattaforma **full-stack** sviluppata per simulare il **backoffice gestionale** di un sistema di prenotazioni turistiche.
 
-Currently, two official plugins are available:
+Il progetto consente la gestione di **utenti, host, abitazioni, prenotazioni e feedback**, includendo statistiche e funzionalità avanzate lato backend.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## Stack Tecnologico
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Backend
+- Java 21
+- Maven
+- Javalin (REST API)
+- JDBC
+- PostgreSQL
+- UUID come chiavi primarie
+- DAO Pattern
+- DTO Pattern
+- Lombok
 
-## Expanding the ESLint configuration
+### Frontend
+- React
+- TypeScript
+- Vite
+- TailwindCSS
+- DaisyUI
+- React Router
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Database
+- PostgreSQL
+- Gestione tramite pgAdmin
+- Relazioni con foreign key
+- Integrità referenziale
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Funzionalità Principali
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### Gestione Utenti
+- Creazione, modifica ed eliminazione utenti
+- Visualizzazione lista utenti
+- Statistiche sugli utenti più attivi
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Gestione Host
+- Creazione host a partire da un utente
+- Codice host univoco
+- Visualizzazione host
+- Identificazione Super Host
+- Host con più prenotazioni nell’ultimo mese
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Gestione Abitazioni
+- Associazione abitazioni a un host
+- Visualizzazione abitazioni
+- Statistiche:
+  - abitazione più gettonata
+  - media posti letto
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### Prenotazioni
+- Creazione prenotazioni
+- Controllo sovrapposizione date
+- Visualizzazione:
+  - ultima prenotazione di un utente
+  - prenotazioni per host
+- Ordinamento per data
+
+### Feedback
+- Inserimento feedback su una prenotazione
+- Campi:
+  - titolo
+  - testo
+  - punteggio (1–5)
+- Validazione lato backend
+- Salvataggio persistente su database
+
+---
+
+## Interfaccia Utente
+
+- Dashboard centrale Backoffice
+- Navigazione tramite navbar
+- UI responsive
+- Componenti modulari
+- Azioni CRUD tramite form
+- Gestione errori e feedback utente
+
+---
+
