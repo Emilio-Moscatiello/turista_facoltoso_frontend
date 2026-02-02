@@ -1,4 +1,6 @@
 import { Outlet, Link } from "react-router-dom";
+import logo from "../assets/logo.png";
+
 
 export default function MainLayout() {
     return (
@@ -8,9 +10,13 @@ export default function MainLayout() {
                 <div className="flex-1">
                     <Link
                         to="/"
-                        className="text-xl font-semibold btn btn-ghost normal-case"
+                        className="btn btn-ghost normal-case px-2"
                     >
-                        Turista per sempre
+                        <img
+                            src={logo}
+                            alt="Turista per sempre"
+                            className="h-36 w-auto"
+                        />
                     </Link>
                 </div>
                 <div className="flex gap-4">
