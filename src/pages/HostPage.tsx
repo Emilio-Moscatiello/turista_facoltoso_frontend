@@ -82,7 +82,7 @@ export default function HostPage() {
             {loading && <p className="text-info">Caricamento...</p>}
             {error && <p className="text-error">{error}</p>}
 
-            {/* SUPER HOST */}
+            {/* super host */}
             {superHost.length > 0 && (
                 <div className="mb-8">
                     <h2 className="text-xl font-semibold mb-2">Super Host</h2>
@@ -110,7 +110,7 @@ export default function HostPage() {
                 </div>
             )}
 
-            {/* TOP HOST */}
+            {/* top host */}
             {topHost.length > 0 && (
                 <div>
                     <h2 className="text-xl font-semibold mb-2">

@@ -166,9 +166,6 @@ export async function getAbitazioni() {
     return response.json();
 }
 
-
-// === HOST CRUD ===
-
 export async function getAllHost() {
     const res = await fetch("http://localhost:7000/host");
     if (!res.ok) throw new Error("Errore caricamento host");
@@ -223,8 +220,9 @@ export const deleteAbitazioneForHost = (hostId: string, abitazioneId: string) =>
 export async function createFeedbackForPrenotazione(
     prenotazioneId: string,
     data: {
-        voto: number;
-        commento: string;
+        titolo: string;
+        testo: string;
+        punteggio: number;
     }
 ) {
     const res = await fetch(
@@ -242,9 +240,8 @@ export async function createFeedbackForPrenotazione(
     }
 
     return res.json();
-
-
 }
+
 
 export async function getAllPrenotazioni() {
     const res = await fetch("http://localhost:7000/prenotazioni");

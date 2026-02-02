@@ -12,15 +12,17 @@ export default function FeedbackForm({
     onSuccess,
     onCancel,
 }: Props) {
-    const [voto, setVoto] = useState(5);
-    const [commento, setCommento] = useState("");
+    const [titolo, setTitolo] = useState("");
+    const [testo, setTesto] = useState("");
+    const [punteggio, setPunteggio] = useState(5);
     const [error, setError] = useState<string | null>(null);
 
     const handleSubmit = async () => {
         try {
             await createFeedbackForPrenotazione(prenotazioneId, {
-                voto,
-                commento,
+                titolo,
+                testo,
+                punteggio,
             });
             onSuccess();
         } catch (e) {
@@ -34,10 +36,17 @@ export default function FeedbackForm({
 
             {error && <p className="text-error">{error}</p>}
 
+            <input
+                className="input input-bordered w-full mb-2"
+                placeholder="Titolo"
+                value={titolo}
+                onChange={(e) => setTitolo(e.target.value)}
+            />
+
             <select
                 className="select select-bordered w-full mb-2"
-                value={voto}
-                onChange={(e) => setVoto(Number(e.target.value))}
+                value={punteggio}
+                onChange={(e) => setPunteggio(Number(e.target.value))}
             >
                 {[1, 2, 3, 4, 5].map((v) => (
                     <option key={v} value={v}>
@@ -48,9 +57,9 @@ export default function FeedbackForm({
 
             <textarea
                 className="textarea textarea-bordered w-full mb-3"
-                placeholder="Commento (facoltativo)"
-                value={commento}
-                onChange={(e) => setCommento(e.target.value)}
+                placeholder="Testo"
+                value={testo}
+                onChange={(e) => setTesto(e.target.value)}
             />
 
             <div className="flex gap-2">
