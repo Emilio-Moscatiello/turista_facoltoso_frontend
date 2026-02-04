@@ -1,4 +1,8 @@
 import { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 interface Props {
     onSave: (a: {
@@ -44,61 +48,79 @@ export default function AbitazioneForm({ onSave }: Props) {
     };
 
     return (
-        <div className="card bg-base-100 shadow p-4 mb-6">
-            <h3 className="font-semibold mb-4">Nuova abitazione</h3>
+        <Card className="mb-6">
+            <CardHeader>
+                <CardTitle className="text-lg font-semibold">
+                    Nuova abitazione
+                </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <div className="space-y-1.5">
+                        <Label htmlFor="nome">Nome abitazione</Label>
+                        <Input
+                            id="nome"
+                            placeholder="Nome abitazione"
+                            value={form.nome}
+                            onChange={(e) =>
+                                setForm({ ...form, nome: e.target.value })
+                            }
+                        />
+                    </div>
 
-            <input
-                className="input input-bordered w-full mb-3"
-                placeholder="Nome abitazione"
-                value={form.nome}
-                onChange={(e) =>
-                    setForm({ ...form, nome: e.target.value })
-                }
-            />
+                    <div className="space-y-1.5 md:col-span-2">
+                        <Label htmlFor="indirizzo">Indirizzo</Label>
+                        <Input
+                            id="indirizzo"
+                            placeholder="Indirizzo"
+                            value={form.indirizzo}
+                            onChange={(e) =>
+                                setForm({ ...form, indirizzo: e.target.value })
+                            }
+                        />
+                    </div>
 
-            <input
-                className="input input-bordered w-full mb-3"
-                placeholder="Indirizzo"
-                value={form.indirizzo}
-                onChange={(e) =>
-                    setForm({ ...form, indirizzo: e.target.value })
-                }
-            />
+                    <div className="space-y-1.5">
+                        <Label htmlFor="postiLetto">Numero posti letto</Label>
+                        <Input
+                            id="postiLetto"
+                            type="number"
+                            min={1}
+                            placeholder="Numero posti letto"
+                            value={form.postiLetto}
+                            onChange={(e) =>
+                                setForm({
+                                    ...form,
+                                    postiLetto: Number(e.target.value),
+                                })
+                            }
+                        />
+                    </div>
 
-            <input
-                type="number"
-                min={1}
-                className="input input-bordered w-full mb-3"
-                placeholder="Numero posti letto"
-                value={form.postiLetto}
-                onChange={(e) =>
-                    setForm({
-                        ...form,
-                        postiLetto: Number(e.target.value),
-                    })
-                }
-            />
+                    <div className="space-y-1.5">
+                        <Label htmlFor="prezzo">Prezzo (€)</Label>
+                        <Input
+                            id="prezzo"
+                            type="text"
+                            placeholder="Prezzo (€)"
+                            value={form.prezzo}
+                            onChange={(e) => {
+                                const value = e.target.value.replace(",", ".");
+                                if (!isNaN(Number(value))) {
+                                    setForm({
+                                        ...form,
+                                        prezzo: Number(value),
+                                    });
+                                }
+                            }}
+                        />
+                    </div>
+                </div>
 
-            <input
-                type="text"
-                className="input input-bordered w-full mb-4"
-                placeholder="Prezzo (€)"
-                value={form.prezzo}
-                onChange={(e) => {
-                    const value = e.target.value.replace(",", ".");
-                    if (!isNaN(Number(value))) {
-                        setForm({
-                            ...form,
-                            prezzo: Number(value),
-                        });
-                    }
-                }}
-            />
-
-
-            <button className="btn btn-primary w-full" onClick={handleSubmit}>
-                Salva
-            </button>
-        </div>
+                <Button className="mt-2 w-full" onClick={handleSubmit}>
+                    Salva
+                </Button>
+            </CardContent>
+        </Card>
     );
 }

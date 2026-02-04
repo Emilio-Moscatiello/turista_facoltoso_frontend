@@ -1,5 +1,9 @@
 import { useState, useEffect } from "react";
 import type { Utente } from "../../models/dto";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 interface Props {
     utenteSelezionato?: Utente | null;
@@ -30,30 +34,37 @@ export default function UtenteForm({ utenteSelezionato, onSave, onCancel }: Prop
     };
 
     return (
-        <div className="card bg-base-100 shadow p-4 mt-6">
-            <h2 className="text-xl font-semibold mb-4">
-                {utente.id ? "Modifica Utente" : "Nuovo Utente"}
-            </h2>
+        <Card className="mt-2">
+            <CardHeader>
+                <CardTitle className="text-xl">
+                    {utente.id ? "Modifica utente" : "Nuovo utente"}
+                </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    {["nome", "cognome", "email", "indirizzo"].map((field) => (
+                        <div key={field} className="space-y-1.5">
+                            <Label htmlFor={field} className="capitalize">
+                                {field}
+                            </Label>
+                            <Input
+                                id={field}
+                                name={field}
+                                value={(utente as any)[field]}
+                                onChange={handleChange}
+                                placeholder={field}
+                            />
+                        </div>
+                    ))}
+                </div>
 
-            {["nome", "cognome", "email", "indirizzo"].map((field) => (
-                <input
-                    key={field}
-                    name={field}
-                    value={(utente as any)[field]}
-                    onChange={handleChange}
-                    placeholder={field}
-                    className="input input-bordered w-full mb-2"
-                />
-            ))}
-
-            <div className="flex gap-2 mt-4">
-                <button className="btn btn-primary" onClick={handleSubmit}>
-                    Salva
-                </button>
-                <button className="btn btn-error" onClick={onCancel}>
-                    Annulla
-                </button>
-            </div>
-        </div>
+                <div className="flex flex-wrap gap-2 pt-2">
+                    <Button onClick={handleSubmit}>Salva</Button>
+                    <Button variant="ghost" type="button" onClick={onCancel}>
+                        Annulla
+                    </Button>
+                </div>
+            </CardContent>
+        </Card>
     );
 }

@@ -8,6 +8,7 @@ import {
 import type { Abitazione } from "../models/dto";
 import AbitazioniTable from "../myComponents/tables/AbitazioniTable";
 import AbitazioneForm from "../myComponents/forms/AbitazioneForm";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function AbitazioniHostPage() {
     const { hostId } = useParams<{ hostId: string }>();
@@ -49,20 +50,38 @@ export default function AbitazioniHostPage() {
     };
 
     return (
-        <div>
-            <h1 className="text-2xl font-semibold mb-4">
-                Gestione abitazioni
-            </h1>
+        <div className="space-y-8">
+            <Card>
+                <CardHeader>
+                    <div className="space-y-2">
+                        <CardTitle className="text-2xl">
+                            Gestione abitazioni
+                        </CardTitle>
+                        <p className="text-sm text-muted-foreground">
+                            Crea e gestisci le abitazioni associate a questo host.
+                        </p>
+                    </div>
+                </CardHeader>
+                <CardContent className="space-y-1">
+                    {error && <p className="text-sm text-destructive">{error}</p>}
+                    {loading && (
+                        <p className="text-sm text-muted-foreground">Caricamento...</p>
+                    )}
+                </CardContent>
+            </Card>
 
-            {error && <p className="text-error">{error}</p>}
-            {loading && <p className="text-info">Caricamento...</p>}
+            <section className="grid items-start gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1.3fr)]">
+                <AbitazioneForm onSave={handleCreate} />
 
-            <AbitazioneForm onSave={handleCreate} />
-
-            <AbitazioniTable
-                abitazioni={abitazioni}
-                onDelete={handleDelete}
-            />
+                <Card>
+                    <CardContent>
+                        <AbitazioniTable
+                            abitazioni={abitazioni}
+                            onDelete={handleDelete}
+                        />
+                    </CardContent>
+                </Card>
+            </section>
         </div>
     );
 }

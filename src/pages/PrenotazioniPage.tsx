@@ -5,6 +5,17 @@ import {
     getPrenotazioniByHostId,
 } from "../api/backend";
 import FeedbackForm from "@/myComponents/forms/FeedbackForm";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 
 export default function PrenotazioniPage() {
 
@@ -71,129 +82,177 @@ export default function PrenotazioniPage() {
 
     return (
         <div className="space-y-12">
-
             {/* ultima prenotazione per utente */}
-            <section>
-                <h1 className="text-2xl font-semibold mb-4">
-                    Ultima prenotazione per utente
-                </h1>
-
-                <div className="flex gap-4 mb-4">
-                    <input
-                        type="text"
-                        placeholder="Inserisci ID utente (UUID)"
-                        className="input input-bordered w-full max-w-md"
-                        value={utenteId}
-                        onChange={(e) => setUtenteId(e.target.value)}
-                    />
-
-                    <button
-                        className="btn btn-primary"
-                        onClick={handleSearchUltima}
-                    >
-                        Cerca
-                    </button>
-                </div>
-
-                {loadingUltima && <p className="text-info">Caricamento...</p>}
-                {errorUltima && <p className="text-error">{errorUltima}</p>}
-
-                {ultimaPrenotazione && (
-                    <div className="card bg-base-100 shadow">
-                        <div className="card-body">
-                            <p><strong>Dal:</strong> {ultimaPrenotazione.dataInizio}</p>
-                            <p><strong>Al:</strong> {ultimaPrenotazione.dataFine}</p>
-                            <p><strong>Abitazione:</strong> {ultimaPrenotazione.abitazioneNome}</p>
-                            <p>
-                                <strong>Utente:</strong>{" "}
-                                {ultimaPrenotazione.utenteNome}{" "}
-                                {ultimaPrenotazione.utenteCognome}
-                            </p>
-                        </div>
+            <Card>
+                <CardHeader>
+                    <div className="space-y-2">
+                        <CardTitle className="text-2xl">
+                            Ultima prenotazione per utente
+                        </CardTitle>
+                        <p className="text-sm text-muted-foreground">
+                            Inserisci l&apos;ID utente per recuperare l&apos;ultima prenotazione effettuata.
+                        </p>
                     </div>
-                )}
-            </section>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                    <div className="flex flex-col gap-3 md:flex-row">
+                        <Input
+                            type="text"
+                            placeholder="Inserisci ID utente (UUID)"
+                            className="md:max-w-md"
+                            value={utenteId}
+                            onChange={(e) => setUtenteId(e.target.value)}
+                        />
+
+                        <Button className="md:self-start" onClick={handleSearchUltima}>
+                            Cerca
+                        </Button>
+                    </div>
+
+                    {loadingUltima && (
+                        <p className="text-sm text-muted-foreground">Caricamento...</p>
+                    )}
+                    {errorUltima && (
+                        <p className="text-sm text-destructive">
+                            {errorUltima}
+                        </p>
+                    )}
+
+                    {ultimaPrenotazione && (
+                        <Card className="border border-dashed bg-card/60">
+                            <CardContent className="grid gap-2 py-4 md:grid-cols-2">
+                                <p>
+                                    <strong>Dal:</strong> {ultimaPrenotazione.dataInizio}
+                                </p>
+                                <p>
+                                    <strong>Al:</strong> {ultimaPrenotazione.dataFine}
+                                </p>
+                                <p>
+                                    <strong>Abitazione:</strong>{" "}
+                                    {ultimaPrenotazione.abitazioneNome}
+                                </p>
+                                <p>
+                                    <strong>Utente:</strong>{" "}
+                                    {ultimaPrenotazione.utenteNome}{" "}
+                                    {ultimaPrenotazione.utenteCognome}
+                                </p>
+                            </CardContent>
+                        </Card>
+                    )}
+                </CardContent>
+            </Card>
 
             {/* prenotazioni per host */}
-            <section>
-                <h2 className="text-2xl font-semibold mb-4">
-                    Prenotazioni per Host
-                </h2>
+            <section className="space-y-4">
+                <div>
+                    <h2 className="mb-1 text-2xl font-semibold">
+                        Prenotazioni per Host
+                    </h2>
+                    <p className="text-sm text-muted-foreground">
+                        Espandi un host per visualizzare le prenotazioni associate e lasciare un feedback.
+                    </p>
+                </div>
 
                 {hosts.map((h) => (
-                    <div key={h.id} className="card bg-base-100 shadow mb-4">
-                        <div
-                            className="card-body cursor-pointer"
-                            onClick={() => toggleHost(h.id)}
-                        >
-                            <h3 className="font-semibold">
-                                {h.codiceHost} – {h.utenteId.slice(0, 8)}…
-                            </h3>
-                        </div>
-
+                    <Card
+                        key={h.id}
+                        className="cursor-pointer transition hover:border-primary/50"
+                        onClick={() => toggleHost(h.id)}
+                    >
+                        <CardHeader className="flex flex-row items-center justify-between gap-3">
+                            <div>
+                                <CardTitle className="text-base">
+                                    {h.codiceHost} – {h.utenteId.slice(0, 8)}…
+                                </CardTitle>
+                                <p className="text-xs text-muted-foreground">
+                                    Clicca per mostrare/nascondere le prenotazioni
+                                </p>
+                            </div>
+                            <span className="text-sm text-muted-foreground">
+                                {openHostId === h.id ? "Nascondi" : "Mostra"}
+                            </span>
+                        </CardHeader>
                         {openHostId === h.id && (
-                            <div className="px-4 pb-4">
-                                {loadingHost && <p>Caricamento...</p>}
+                            <CardContent className="space-y-3">
+                                {loadingHost && (
+                                    <p className="text-sm text-muted-foreground">
+                                        Caricamento...
+                                    </p>
+                                )}
 
                                 {!loadingHost && prenotazioniHost.length === 0 && (
-                                    <p className="text-sm">Nessuna prenotazione</p>
+                                    <p className="text-sm text-muted-foreground">
+                                        Nessuna prenotazione
+                                    </p>
                                 )}
 
                                 {prenotazioniHost.length > 0 && (
-                                    <table className="table table-zebra mt-3">
-                                        <thead>
-                                            <tr>
-                                                <th>Utente</th>
-                                                <th>Abitazione</th>
-                                                <th>Dal</th>
-                                                <th>Al</th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
+                                    <Table className="mt-2 rounded-xl border bg-card/40 shadow-sm">
+                                        <TableHeader>
+                                            <TableRow>
+                                                <TableHead>Utente</TableHead>
+                                                <TableHead>Abitazione</TableHead>
+                                                <TableHead>Dal</TableHead>
+                                                <TableHead>Al</TableHead>
+                                                <TableHead />
+                                            </TableRow>
+                                        </TableHeader>
+                                        <TableBody>
                                             {prenotazioniHost.map((p) => (
-                                                <tr key={p.prenotazioneId}>
-
-                                                    <td className="font-mono text-xs">
-                                                        {p.utenteId.slice(0, 8)}…
-                                                    </td>
-                                                    <td>{p.abitazioneNome}</td>
-                                                    <td>{p.dataInizio}</td>
-                                                    <td>{p.dataFine}</td>
-                                                    <td>
-                                                        <button
-                                                            className="btn btn-sm btn-success"
+                                                <TableRow key={p.prenotazioneId}>
+                                                    <TableCell>
+                                                        <span className="font-medium">
+                                                            {[p.utenteNome, p.utenteCognome].filter(Boolean).join(" ") || p.utenteId.slice(0, 8) + "…"}
+                                                        </span>
+                                                        {(p.utenteNome || p.utenteCognome) && (
+                                                            <span className="ml-1 font-mono text-xs text-muted-foreground">
+                                                                ({p.utenteId.slice(0, 8)}…)
+                                                            </span>
+                                                        )}
+                                                    </TableCell>
+                                                    <TableCell>{p.abitazioneNome}</TableCell>
+                                                    <TableCell>{p.dataInizio}</TableCell>
+                                                    <TableCell>{p.dataFine}</TableCell>
+                                                    <TableCell className="text-right">
+                                                        <Button
+                                                            size="sm"
+                                                            variant="secondary"
                                                             onClick={(e) => {
                                                                 e.stopPropagation();
-                                                                setFeedbackPrenotazioneId(p.prenotazioneId);
+                                                                setFeedbackPrenotazioneId(
+                                                                    p.prenotazioneId,
+                                                                );
                                                             }}
                                                         >
                                                             Lascia feedback
-                                                        </button>
-                                                    </td>
-                                                </tr>
+                                                        </Button>
+                                                    </TableCell>
+                                                </TableRow>
                                             ))}
-                                        </tbody>
-                                    </table>
+                                        </TableBody>
+                                    </Table>
                                 )}
-                            </div>
+                            </CardContent>
                         )}
-                    </div>
+                    </Card>
                 ))}
             </section>
 
             {/* feedback */}
-
             {feedbackPrenotazioneId && (
-                <FeedbackForm
-                    key={feedbackPrenotazioneId}
-                    prenotazioneId={feedbackPrenotazioneId}
-                    onSuccess={() => {
-                        alert("Feedback inviato");
-                        setFeedbackPrenotazioneId(null);
-                    }}
-                    onCancel={() => setFeedbackPrenotazioneId(null)}
-                />
+                <Card>
+                    <CardContent>
+                        <FeedbackForm
+                            key={feedbackPrenotazioneId}
+                            prenotazioneId={feedbackPrenotazioneId}
+                            onSuccess={() => {
+                                alert("Feedback inviato");
+                                setFeedbackPrenotazioneId(null);
+                            }}
+                            onCancel={() => setFeedbackPrenotazioneId(null)}
+                        />
+                    </CardContent>
+                </Card>
             )}
         </div>
     );

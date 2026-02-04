@@ -1,5 +1,14 @@
 import type { Host } from "../../models/dto";
 import { useNavigate } from "react-router-dom";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 
 interface Props {
     host: Host[];
@@ -12,43 +21,49 @@ export default function HostTable({ host, onEdit, onDelete }: Props) {
     if (host.length === 0) return null;
 
     return (
-        <table className="table table-zebra">
-            <thead>
-                <tr>
-                    <th>Utente ID</th>
-                    <th>Codice Host</th>
-                    <th>Azioni</th>
-                </tr>
-            </thead>
-            <tbody>
+        <Table className="rounded-xl border bg-card/40 shadow-sm">
+            <TableHeader>
+                <TableRow>
+                    <TableHead>Utente ID</TableHead>
+                    <TableHead>Codice Host</TableHead>
+                    <TableHead className="w-56 text-right">Azioni</TableHead>
+                </TableRow>
+            </TableHeader>
+            <TableBody>
                 {host.map((h) => (
-                    <tr key={h.id}>
-                        <td>{h.utenteId}</td>
-                        <td>{h.codiceHost}</td>
-                        <td className="flex gap-2">
-                            <button
-                                className="btn btn-sm btn-accent"
-                                onClick={() => navigate(`/host/${h.id}/abitazioni`)}
-                            >
-                                Gestisci abitazioni
-                            </button>
-
-                            <button
-                                className="btn btn-sm btn-warning"
-                                onClick={() => onEdit(h)}
-                            >
-                                Modifica
-                            </button>
-                            <button
-                                className="btn btn-sm btn-error"
-                                onClick={() => onDelete(h.id!)}
-                            >
-                                Elimina
-                            </button>
-                        </td>
-                    </tr>
+                    <TableRow key={h.id}>
+                        <TableCell className="font-mono text-xs text-muted-foreground">
+                            {h.utenteId}
+                        </TableCell>
+                        <TableCell>{h.codiceHost}</TableCell>
+                        <TableCell>
+                            <div className="flex flex-wrap justify-end gap-2">
+                                <Button
+                                    size="xs"
+                                    variant="secondary"
+                                    onClick={() => navigate(`/host/${h.id}/abitazioni`)}
+                                >
+                                    Gestisci abitazioni
+                                </Button>
+                                <Button
+                                    size="xs"
+                                    variant="outline"
+                                    onClick={() => onEdit(h)}
+                                >
+                                    Modifica
+                                </Button>
+                                <Button
+                                    size="xs"
+                                    variant="destructive"
+                                    onClick={() => onDelete(h.id!)}
+                                >
+                                    Elimina
+                                </Button>
+                            </div>
+                        </TableCell>
+                    </TableRow>
                 ))}
-            </tbody>
-        </table>
+            </TableBody>
+        </Table>
     );
 }

@@ -10,6 +10,16 @@ import {
 import type { Host } from "../models/dto";
 import HostForm from "../myComponents/forms/HostForm";
 import HostTable from "../myComponents/tables/HostTable";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 
 export default function HostPage() {
     const [superHost, setSuperHost] = useState<any[]>([]);
@@ -26,10 +36,13 @@ export default function HostPage() {
 
 
     const handleLoadSuperHost = async () => {
+        if (superHost.length > 0) {
+            setSuperHost([]);
+            setError(null);
+            return;
+        }
         setLoading(true);
         setError(null);
-        setSuperHost([]);
-
         try {
             const data = await getSuperHost();
             setSuperHost(data);
@@ -45,10 +58,13 @@ export default function HostPage() {
     };
 
     const handleLoadTopHost = async () => {
+        if (topHost.length > 0) {
+            setTopHost([]);
+            setError(null);
+            return;
+        }
         setLoading(true);
         setError(null);
-        setTopHost([]);
-
         try {
             const data = await getHostTopUltimoMese();
             setTopHost(data);
@@ -61,114 +77,135 @@ export default function HostPage() {
         } finally {
             setLoading(false);
         }
-
-
     };
 
     return (
-        <div>
-            <h1 className="text-2xl font-semibold mb-6">Gestione Host</h1>
+        <div className="space-y-10">
+            <Card>
+                <CardHeader>
+                    <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                        <div>
+                            <CardTitle className="text-2xl">Gestione Host</CardTitle>
+                            <p className="text-sm text-muted-foreground">
+                                Consulta le performance degli host e gestisci il loro profilo.
+                            </p>
+                        </div>
 
-            <div className="flex gap-4 mb-6">
-                <button className="btn btn-success" onClick={handleLoadSuperHost}>
-                    Carica Super Host
-                </button>
+                        <div className="flex flex-wrap gap-3">
+                            <Button
+                                variant={superHost.length > 0 ? "outline" : "secondary"}
+                                onClick={handleLoadSuperHost}
+                            >
+                                {superHost.length > 0 ? "Nascondi Super Host" : "Carica Super Host"}
+                            </Button>
+                            <Button
+                                variant={topHost.length > 0 ? "outline" : "default"}
+                                onClick={handleLoadTopHost}
+                            >
+                                {topHost.length > 0 ? "Nascondi Top Ultimo Mese" : "Carica Host Top Ultimo Mese"}
+                            </Button>
+                        </div>
+                    </div>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                    {loading && (
+                        <p className="text-sm text-muted-foreground">Caricamento...</p>
+                    )}
+                    {error && (
+                        <p className="text-sm text-destructive">
+                            {error}
+                        </p>
+                    )}
 
-                <button className="btn btn-success" onClick={handleLoadTopHost}>
-                    Carica Host Top Ultimo Mese
-                </button>
-            </div>
+                    <div className="grid gap-6 md:grid-cols-2">
+                        {superHost.length > 0 && (
+                            <div className="space-y-3">
+                                <h2 className="text-lg font-semibold">Super Host</h2>
+                                <Table className="rounded-xl border bg-card/40 shadow-sm">
+                                    <TableHeader>
+                                        <TableRow>
+                                            <TableHead>Codice Host</TableHead>
+                                            <TableHead>Nome</TableHead>
+                                            <TableHead>Cognome</TableHead>
+                                            <TableHead>Prenotazioni</TableHead>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {superHost.map((host, index) => (
+                                            <TableRow key={index}>
+                                                <TableCell>{host.codiceHost}</TableCell>
+                                                <TableCell>{host.nome}</TableCell>
+                                                <TableCell>{host.cognome}</TableCell>
+                                                <TableCell>{host.numeroPrenotazioni}</TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </div>
+                        )}
 
-            {loading && <p className="text-info">Caricamento...</p>}
-            {error && <p className="text-error">{error}</p>}
+                        {topHost.length > 0 && (
+                            <div className="space-y-3">
+                                <h2 className="text-lg font-semibold">
+                                    Host con più prenotazioni (ultimo mese)
+                                </h2>
+                                <Table className="rounded-xl border bg-card/40 shadow-sm">
+                                    <TableHeader>
+                                        <TableRow>
+                                            <TableHead>Codice Host</TableHead>
+                                            <TableHead>Nome</TableHead>
+                                            <TableHead>Cognome</TableHead>
+                                            <TableHead>Prenotazioni</TableHead>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {topHost.map((host, index) => (
+                                            <TableRow key={index}>
+                                                <TableCell>{host.codiceHost}</TableCell>
+                                                <TableCell>{host.nome}</TableCell>
+                                                <TableCell>{host.cognome}</TableCell>
+                                                <TableCell>{host.numeroPrenotazioni}</TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </div>
+                        )}
+                    </div>
+                </CardContent>
+            </Card>
 
-            {/* super host */}
-            {superHost.length > 0 && (
-                <div className="mb-8">
-                    <h2 className="text-xl font-semibold mb-2">Super Host</h2>
-
-                    <table className="table table-zebra">
-                        <thead>
-                            <tr>
-                                <th>Codice Host</th>
-                                <th>Nome</th>
-                                <th>Cognome</th>
-                                <th>Prenotazioni</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {superHost.map((host, index) => (
-                                <tr key={index}>
-                                    <td>{host.codiceHost}</td>
-                                    <td>{host.nome}</td>
-                                    <td>{host.cognome}</td>
-                                    <td>{host.numeroPrenotazioni}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            )}
-
-            {/* top host */}
-            {topHost.length > 0 && (
+            <section className="grid items-start gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1.3fr)]">
                 <div>
-                    <h2 className="text-xl font-semibold mb-2">
-                        Host con più prenotazioni (ultimo mese)
-                    </h2>
-
-                    <table className="table table-zebra">
-                        <thead>
-                            <tr>
-                                <th>Codice Host</th>
-                                <th>Nome</th>
-                                <th>Cognome</th>
-                                <th>Prenotazioni</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {topHost.map((host, index) => (
-                                <tr key={index}>
-                                    <td>{host.codiceHost}</td>
-                                    <td>{host.nome}</td>
-                                    <td>{host.cognome}</td>
-                                    <td>{host.numeroPrenotazioni}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                    <h2 className="mb-4 text-2xl font-semibold">Aggiungi / Modifica Host</h2>
+                    <HostForm
+                        hostSelezionato={hostSelezionato}
+                        onSave={async (hostValue) => {
+                            if (hostValue.id) {
+                                await updateHost(hostValue.id, hostValue);
+                            } else {
+                                await createHost(hostValue);
+                            }
+                            setHostSelezionato(null);
+                            setHost(await getAllHost());
+                        }}
+                        onCancel={() => setHostSelezionato(null)}
+                    />
                 </div>
-            )}
 
-            <hr className="my-10" />
-
-            <h2 className="text-2xl font-semibold mb-4">Aggiungi Host</h2>
-
-            <HostForm
-                hostSelezionato={hostSelezionato}
-                onSave={async (host) => {
-                    if (host.id) {
-                        await updateHost(host.id, host);
-                    } else {
-                        await createHost(host);
-                    }
-                    setHostSelezionato(null);
-                    setHost(await getAllHost());
-                }}
-                onCancel={() => setHostSelezionato(null)}
-            />
-
-            <HostTable
-                host={host}
-                onEdit={setHostSelezionato}
-                onDelete={async (id) => {
-                    await deleteHost(id);
-                    setHost(await getAllHost());
-                }}
-            />
-
+                <Card>
+                    <CardContent>
+                        <HostTable
+                            host={host}
+                            onEdit={setHostSelezionato}
+                            onDelete={async (id) => {
+                                await deleteHost(id);
+                                setHost(await getAllHost());
+                            }}
+                        />
+                    </CardContent>
+                </Card>
+            </section>
         </div>
-
-
     );
 }

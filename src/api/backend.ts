@@ -130,6 +130,24 @@ export async function deleteUtente(id: string) {
     if (!res.ok) throw new Error("Errore eliminazione utente");
 }
 
+export async function createPrenotazione(data: {
+    utenteId: string;
+    abitazioneId: string;
+    dataInizio: string;
+    dataFine: string;
+}) {
+    const res = await fetch(`${BASE_URL}/prenotazioni`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+    });
+    if (!res.ok) {
+        const msg = await res.text();
+        throw new Error(msg);
+    }
+    return res.json();
+}
+
 export async function createPrenotazioneForUtente(
     utenteId: string,
     prenotazione: {
@@ -153,7 +171,6 @@ export async function createPrenotazioneForUtente(
     }
 
     return response.json();
-
 }
 
 export async function getAbitazioni() {
@@ -202,20 +219,54 @@ export async function deleteHost(id: string) {
     if (!res.ok) throw new Error("Errore eliminazione host");
 }
 
-export const getAbitazioniByHostId = (hostId: string) =>
-    fetch(`${BASE_URL}/host/${hostId}/abitazioni`).then(r => r.json());
+export async function getAbitazioniByHostId(hostId: string) {
+    const r = await fetch(`${BASE_URL}/host/${hostId}/abitazioni`);
+    if (!r.ok) throw new Error("Errore nel recupero delle abitazioni dell'host");
+    return r.json();
+}
 
-export const createAbitazioneForHost = (hostId: string, data: any) =>
-    fetch(`${BASE_URL}/abitazioni/host/${hostId}`, {
+export async function createAbitazioneForHost(hostId: string, data: any) {
+    const res = await fetch(`${BASE_URL}/abitazioni/host/${hostId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
     });
+    if (!res.ok) {
+        const msg = await res.text();
+        throw new Error(msg || "Errore creazione abitazione");
+    }
+    return res.json();
+}
 
-export const deleteAbitazioneForHost = (hostId: string, abitazioneId: string) =>
-    fetch(`${BASE_URL}/abitazioni/host/${hostId}/${abitazioneId}`, {
+export async function deleteAbitazioneForHost(hostId: string, abitazioneId: string) {
+    const res = await fetch(`${BASE_URL}/abitazioni/host/${hostId}/${abitazioneId}`, {
         method: "DELETE",
     });
+    if (!res.ok) {
+        const msg = await res.text();
+        throw new Error(msg || "Errore eliminazione abitazione");
+    }
+}
+
+export async function getFeedbacks(): Promise<FeedbackListItem[]> {
+    const res = await fetch(`${BASE_URL}/feedback`);
+    if (!res.ok) throw new Error("Errore caricamento feedback");
+    return res.json();
+}
+
+export interface FeedbackListItem {
+    id: string;
+    prenotazioneId: string;
+    titolo: string;
+    testo: string;
+    punteggio: number;
+    creatoIl: string | null;
+    abitazioneNome: string;
+    utenteNome: string;
+    utenteCognome: string;
+    dataInizio: string | null;
+    dataFine: string | null;
+}
 
 export async function createFeedbackForPrenotazione(
     prenotazioneId: string,
@@ -226,7 +277,7 @@ export async function createFeedbackForPrenotazione(
     }
 ) {
     const res = await fetch(
-        `http://localhost:7000/prenotazioni/${prenotazioneId}/feedback`,
+        `${BASE_URL}/prenotazioni/${prenotazioneId}/feedback`,
         {
             method: "POST",
             headers: { "Content-Type": "application/json" },

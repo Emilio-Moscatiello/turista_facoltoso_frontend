@@ -11,6 +11,16 @@ import UtentiTable from "../myComponents/tables/UtentiTable";
 import UtenteForm from "../myComponents/forms/UtenteForm";
 import type { Utente } from "../models/dto";
 import PrenotazioneForm from "@/myComponents/forms/PrenotazioneForm";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 
 export default function UtentiPage() {
 
@@ -42,81 +52,96 @@ export default function UtentiPage() {
         setUtenti(await getAllUtenti());
     };
 
-    const handleLoadTopUtenti = async () => {
-        console.log("CHIAMATA TOP 5");
-
-        try {
-            const data = await getTopUtentiUltimoMese();
-            console.log("RISPOSTA TOP 5:", data);
-            setUtentiTop(data);
-        } catch (err) {
-            console.error("Errore caricamento top utenti", err);
+    const handleLoadTopUtenti = () => {
+        if (utentiTop.length > 0) {
+            setUtentiTop([]);
+            return;
         }
+        getTopUtentiUltimoMese()
+            .then(setUtentiTop)
+            .catch(console.error);
     };
 
 
     return (
-        <div>
-            <h1 className="text-2xl font-semibold mb-4">Utenti</h1>
+        <div className="space-y-8">
+            <Card>
+                <CardHeader>
+                    <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                        <div>
+                            <CardTitle className="text-2xl">Utenti</CardTitle>
+                            <p className="text-sm text-muted-foreground">
+                                Crea, modifica e gestisci gli utenti registrati.
+                            </p>
+                        </div>
 
-            <button
-                className="btn btn-primary mb-4"
-                onClick={() => {
-                    console.log("CLICK TOP 5");
-                    handleLoadTopUtenti();
-                }}
-            >
-                Carica Top 5 Utenti
-            </button>
+                        <Button
+                            variant={utentiTop.length > 0 ? "outline" : "default"}
+                            onClick={handleLoadTopUtenti}
+                        >
+                            {utentiTop.length > 0 ? "Nascondi Top 5 Utenti" : "Carica Top 5 Utenti"}
+                        </Button>
+                    </div>
+                </CardHeader>
+                <CardContent>
+                    {utentiTop.length > 0 && (
+                        <Table className="mt-2 rounded-xl border bg-card/40 shadow-sm">
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>Nome</TableHead>
+                                    <TableHead>Cognome</TableHead>
+                                    <TableHead>Email</TableHead>
+                                    <TableHead>Giorni prenotati</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {utentiTop.map((u, index) => (
+                                    <TableRow key={index}>
+                                        <TableCell>{u.nome}</TableCell>
+                                        <TableCell>{u.cognome}</TableCell>
+                                        <TableCell>{u.email}</TableCell>
+                                        <TableCell>{u.giorniPrenotati}</TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    )}
+                </CardContent>
+            </Card>
 
-            {utentiTop.length > 0 && (
-                <table className="table table-zebra mb-8">
-                    <thead>
-                        <tr>
-                            <th>Nome</th>
-                            <th>Cognome</th>
-                            <th>Email</th>
-                            <th>Giorni prenotati</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {utentiTop.map((u, index) => (
-                            <tr key={index}>
-                                <td>{u.nome}</td>
-                                <td>{u.cognome}</td>
-                                <td>{u.email}</td>
-                                <td>{u.giorniPrenotati}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            )}
+            <section className="grid items-start gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1.2fr)]">
+                <UtenteForm
+                    utenteSelezionato={utenteSelezionato}
+                    onSave={handleSave}
+                    onCancel={() => setUtenteSelezionato(null)}
+                />
 
-            <UtenteForm
-                utenteSelezionato={utenteSelezionato}
-                onSave={handleSave}
-                onCancel={() => setUtenteSelezionato(null)}
-            />
-
-            <UtentiTable
-                utenti={utenti}
-                onEdit={setUtenteSelezionato}
-                onDelete={handleDelete}
-                onAddPrenotazione={(utenteId) => setPrenotazioneUtenteId(utenteId)}
-            />
+                <Card>
+                    <CardContent>
+                        <UtentiTable
+                            utenti={utenti}
+                            onEdit={setUtenteSelezionato}
+                            onDelete={handleDelete}
+                            onAddPrenotazione={(utenteId) => setPrenotazioneUtenteId(utenteId)}
+                        />
+                    </CardContent>
+                </Card>
+            </section>
 
             {prenotazioneUtenteId && (
-                <PrenotazioneForm
-                    utenteId={prenotazioneUtenteId}
-                    onSuccess={() => {
-                        setPrenotazioneUtenteId(null);
-                        alert("Prenotazione creata con successo");
-                    }}
-                    onCancel={() => setPrenotazioneUtenteId(null)}
-                />
+                <Card>
+                    <CardContent>
+                        <PrenotazioneForm
+                            utenteId={prenotazioneUtenteId}
+                            onSuccess={() => {
+                                setPrenotazioneUtenteId(null);
+                                alert("Prenotazione creata con successo");
+                            }}
+                            onCancel={() => setPrenotazioneUtenteId(null)}
+                        />
+                    </CardContent>
+                </Card>
             )}
-
-
         </div>
     );
 }

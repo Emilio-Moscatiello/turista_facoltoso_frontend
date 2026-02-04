@@ -1,5 +1,17 @@
 import { useState } from "react";
 import { createFeedbackForPrenotazione } from "../../api/backend";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 
 interface Props {
     prenotazioneId: string;
@@ -31,45 +43,64 @@ export default function FeedbackForm({
     };
 
     return (
-        <div className="card bg-base-100 shadow p-4 mt-4">
-            <h3 className="font-semibold mb-2">Lascia un feedback</h3>
+        <Card className="mt-4">
+            <CardHeader>
+                <CardTitle className="text-lg font-semibold">
+                    Lascia un feedback
+                </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                {error && <p className="text-sm text-destructive">{error}</p>}
 
-            {error && <p className="text-error">{error}</p>}
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <div className="space-y-1.5 md:col-span-2">
+                        <Label htmlFor="titolo">Titolo</Label>
+                        <Input
+                            id="titolo"
+                            placeholder="Titolo"
+                            value={titolo}
+                            onChange={(e) => setTitolo(e.target.value)}
+                        />
+                    </div>
 
-            <input
-                className="input input-bordered w-full mb-2"
-                placeholder="Titolo"
-                value={titolo}
-                onChange={(e) => setTitolo(e.target.value)}
-            />
+                    <div className="space-y-1.5 md:col-span-2">
+                        <Label>Punteggio</Label>
+                        <Select
+                            value={String(punteggio)}
+                            onValueChange={(value) => setPunteggio(Number(value))}
+                        >
+                            <SelectTrigger>
+                                <SelectValue placeholder="Seleziona il punteggio" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {[1, 2, 3, 4, 5].map((v) => (
+                                    <SelectItem key={v} value={String(v)}>
+                                        {v} ⭐
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
 
-            <select
-                className="select select-bordered w-full mb-2"
-                value={punteggio}
-                onChange={(e) => setPunteggio(Number(e.target.value))}
-            >
-                {[1, 2, 3, 4, 5].map((v) => (
-                    <option key={v} value={v}>
-                        {v} ⭐
-                    </option>
-                ))}
-            </select>
+                    <div className="space-y-1.5 md:col-span-2">
+                        <Label htmlFor="testo">Testo</Label>
+                        <Textarea
+                            id="testo"
+                            className="min-h-24"
+                            placeholder="Scrivi qui il tuo feedback..."
+                            value={testo}
+                            onChange={(e) => setTesto(e.target.value)}
+                        />
+                    </div>
+                </div>
 
-            <textarea
-                className="textarea textarea-bordered w-full mb-3"
-                placeholder="Testo"
-                value={testo}
-                onChange={(e) => setTesto(e.target.value)}
-            />
-
-            <div className="flex gap-2">
-                <button className="btn btn-primary" onClick={handleSubmit}>
-                    Invia
-                </button>
-                <button className="btn btn-error" onClick={onCancel}>
-                    Annulla
-                </button>
-            </div>
-        </div>
+                <div className="flex flex-wrap gap-2 pt-2">
+                    <Button onClick={handleSubmit}>Invia</Button>
+                    <Button variant="ghost" type="button" onClick={onCancel}>
+                        Annulla
+                    </Button>
+                </div>
+            </CardContent>
+        </Card>
     );
 }

@@ -1,4 +1,13 @@
 import type { Utente } from "../../models/dto";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 
 interface Props {
     utenti: Utente[];
@@ -16,58 +25,59 @@ export default function UtentiTable({
     if (utenti.length === 0) return null;
 
     return (
-        <table className="table table-zebra mt-6">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nome</th>
-                    <th>Cognome</th>
-                    <th>Email</th>
-                    <th>Indirizzo</th>
-                    <th>Azioni</th>
-                </tr>
-            </thead>
-            <tbody>
+        <Table className="rounded-xl border bg-card/40 shadow-sm">
+            <TableHeader>
+                <TableRow>
+                    <TableHead className="w-32">ID</TableHead>
+                    <TableHead>Nome</TableHead>
+                    <TableHead>Cognome</TableHead>
+                    <TableHead>Email</TableHead>
+                    <TableHead>Indirizzo</TableHead>
+                    <TableHead className="w-48 text-right">Azioni</TableHead>
+                </TableRow>
+            </TableHeader>
+            <TableBody>
                 {utenti.map((u) => (
-                    <tr key={u.id}>
-                        <td
-                            className="font-mono text-xs cursor-pointer"
+                    <TableRow key={u.id}>
+                        <TableCell
+                            className="cursor-pointer font-mono text-xs text-muted-foreground"
                             title="Clicca per copiare"
                             onClick={() => navigator.clipboard.writeText(u.id)}
                         >
                             {u.id.slice(0, 8)}…
-                        </td>
-
-                        <td>{u.nome}</td>
-                        <td>{u.cognome}</td>
-                        <td>{u.email}</td>
-                        <td>{u.indirizzo}</td>
-
-                        <td className="flex gap-2">
-                            <button
-                                className="btn btn-sm btn-warning"
-                                onClick={() => onEdit(u)}
-                            >
-                                Modifica
-                            </button>
-
-                            <button
-                                className="btn btn-sm btn-error"
-                                onClick={() => onDelete(u.id)}
-                            >
-                                Elimina
-                            </button>
-
-                            <button
-                                className="btn btn-sm btn-success"
-                                onClick={() => onAddPrenotazione(u.id)}
-                            >
-                                Aggiungi prenotazione
-                            </button>
-                        </td>
-                    </tr>
+                        </TableCell>
+                        <TableCell>{u.nome}</TableCell>
+                        <TableCell>{u.cognome}</TableCell>
+                        <TableCell>{u.email}</TableCell>
+                        <TableCell>{u.indirizzo}</TableCell>
+                        <TableCell>
+                            <div className="flex flex-wrap justify-end gap-2">
+                                <Button
+                                    size="xs"
+                                    variant="outline"
+                                    onClick={() => onEdit(u)}
+                                >
+                                    Modifica
+                                </Button>
+                                <Button
+                                    size="xs"
+                                    variant="destructive"
+                                    onClick={() => onDelete(u.id)}
+                                >
+                                    Elimina
+                                </Button>
+                                <Button
+                                    size="xs"
+                                    variant="secondary"
+                                    onClick={() => onAddPrenotazione(u.id)}
+                                >
+                                    Aggiungi prenotazione
+                                </Button>
+                            </div>
+                        </TableCell>
+                    </TableRow>
                 ))}
-            </tbody>
-        </table>
+            </TableBody>
+        </Table>
     );
 }

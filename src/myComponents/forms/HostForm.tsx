@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
 import type { Host } from "../../models/dto";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 interface Props {
     hostSelezionato: Host | null;
@@ -29,37 +33,46 @@ export default function HostForm({
     };
 
     return (
-        <div className="card bg-base-100 shadow p-4 mb-6">
-            <h2 className="text-lg font-semibold mb-4">
-                {hostSelezionato ? "Modifica Host" : "Nuovo Host"}
-            </h2>
+        <Card className="mb-6">
+            <CardHeader>
+                <CardTitle className="text-xl">
+                    {hostSelezionato ? "Modifica host" : "Nuovo host"}
+                </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                <div className="grid grid-cols-1 gap-4">
+                    <div className="space-y-1.5">
+                        <Label htmlFor="utenteId">ID utente</Label>
+                        <Input
+                            id="utenteId"
+                            placeholder="ID Utente"
+                            value={host.utenteId}
+                            onChange={(e) =>
+                                setHost({ ...host, utenteId: e.target.value })
+                            }
+                        />
+                    </div>
 
-            <input
-                className="input input-bordered w-full mb-2"
-                placeholder="ID Utente"
-                value={host.utenteId}
-                onChange={(e) =>
-                    setHost({ ...host, utenteId: e.target.value })
-                }
-            />
+                    <div className="space-y-1.5">
+                        <Label htmlFor="codiceHost">Codice host</Label>
+                        <Input
+                            id="codiceHost"
+                            placeholder="Codice Host (es. HOST001)"
+                            value={host.codiceHost}
+                            onChange={(e) =>
+                                setHost({ ...host, codiceHost: e.target.value })
+                            }
+                        />
+                    </div>
+                </div>
 
-            <input
-                className="input input-bordered w-full mb-4"
-                placeholder="Codice Host (es. HOST001)"
-                value={host.codiceHost}
-                onChange={(e) =>
-                    setHost({ ...host, codiceHost: e.target.value })
-                }
-            />
-
-            <div className="flex gap-2">
-                <button className="btn btn-primary" onClick={handleSubmit}>
-                    Salva
-                </button>
-                <button className="btn btn-error" onClick={onCancel}>
-                    Annulla
-                </button>
-            </div>
-        </div>
+                <div className="flex flex-wrap gap-2 pt-2">
+                    <Button onClick={handleSubmit}>Salva</Button>
+                    <Button variant="ghost" type="button" onClick={onCancel}>
+                        Annulla
+                    </Button>
+                </div>
+            </CardContent>
+        </Card>
     );
 }
