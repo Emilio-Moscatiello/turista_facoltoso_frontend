@@ -1,5 +1,6 @@
 import { CalendarDays, ChartNoAxesCombined, House, UserRound } from "lucide-react";
 import { Link } from "react-router-dom";
+import logo from "../assets/logo.png";
 
 export default function HomePage() {
     return (
@@ -7,10 +8,12 @@ export default function HomePage() {
             <div className="w-full max-w-5xl text-center space-y-10">
 
                 {/* Header */}
-                <div className="space-y-2">
-                    <h1 className="text-4xl font-semibold tracking-tight">
-                        Turista per sempre
-                    </h1>
+                <div className="space-y-2 justify-center items-center flex flex-col">
+                    <img
+                        src={logo}
+                        alt="Turista per sempre"
+                        className="h-10 md:h-54 w-auto"
+                    />
                     <p className="text-lg text-base-content/70">
                         Backoffice – pannello gestionale
                     </p>
