@@ -14,6 +14,12 @@ import PrenotazioneForm from "@/myComponents/forms/PrenotazioneForm";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog";
+import {
     Table,
     TableBody,
     TableCell,
@@ -128,9 +134,17 @@ export default function UtentiPage() {
                 </Card>
             </section>
 
-            {prenotazioneUtenteId && (
-                <Card>
-                    <CardContent>
+            <Dialog
+                open={prenotazioneUtenteId !== null}
+                onOpenChange={(open) => {
+                    if (!open) setPrenotazioneUtenteId(null);
+                }}
+            >
+                {prenotazioneUtenteId && (
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Nuova prenotazione</DialogTitle>
+                        </DialogHeader>
                         <PrenotazioneForm
                             utenteId={prenotazioneUtenteId}
                             onSuccess={() => {
@@ -139,9 +153,9 @@ export default function UtentiPage() {
                             }}
                             onCancel={() => setPrenotazioneUtenteId(null)}
                         />
-                    </CardContent>
-                </Card>
-            )}
+                    </DialogContent>
+                )}
+            </Dialog>
         </div>
     );
 }

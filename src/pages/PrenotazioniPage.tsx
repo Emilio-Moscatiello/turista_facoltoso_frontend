@@ -194,6 +194,7 @@ export default function PrenotazioniPage() {
                                                 <TableHead>Abitazione</TableHead>
                                                 <TableHead>Dal</TableHead>
                                                 <TableHead>Al</TableHead>
+                                                <TableHead className="text-right">Totale</TableHead>
                                                 <TableHead />
                                             </TableRow>
                                         </TableHeader>
@@ -213,6 +214,11 @@ export default function PrenotazioniPage() {
                                                     <TableCell>{p.abitazioneNome}</TableCell>
                                                     <TableCell>{p.dataInizio}</TableCell>
                                                     <TableCell>{p.dataFine}</TableCell>
+                                                    <TableCell className="text-right">
+                                                        {p.costoTotale
+                                                            ? `${p.costoTotale} €`
+                                                            : "—"}
+                                                    </TableCell>
                                                     <TableCell className="text-right">
                                                         <Button
                                                             size="sm"
