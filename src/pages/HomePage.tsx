@@ -35,13 +35,9 @@ export default function HomePage() {
                     />
 
                     <div className="space-y-2">
-                        <h1 className="text-2xl font-semibold tracking-tight md:text-3xl">
-                            Controllo totale su utenti, host e prenotazioni
+                        <h1 className="text-2xl font-semibold tracking-tight md:text-3xl mb-8">
+                            Controllo su utenti, host e prenotazioni
                         </h1>
-                        <p className="mx-auto max-w-xl text-sm text-muted-foreground md:text-base">
-                            Gestisci tutto il backoffice di Turista per Sempre da un
-                           &apos;interfaccia moderna, pulita e super veloce.
-                        </p>
                     </div>
 
                     <div className="flex flex-wrap items-center justify-center gap-3 pt-1">
